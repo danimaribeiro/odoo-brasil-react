@@ -1,62 +1,88 @@
-import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
-import {
-   Container, Header, Content, Button, Text, Form,
-   Item, Icon, Input, Label, Body, Thumbnail, Left,
-   Right, Title, Footer, FooterTab
- } from 'native-base';
+/* @flow */
 
+import React, { Component } from 'react';
+import {
+  AppRegistry,
+  View,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  StyleSheet,
+} from 'react-native';
+import {
+  Container,
+  Content,
+  Header,
+  Footer,
+  List,
+  Left,
+  Icon,
+  Thumbnail,
+  Title,
+  Body,
+  Right,
+  Button,
+  ListItem,
+  Item,
+  Fab,
+  InputGroup,
+  Input,
+  Drawer,
+  SideBar,
+  StyleProvider
+} from 'native-base';
+
+import getTheme from '../../native-base-theme/components';
+import DrawerMenu from '../components/drawer';
 
 export default class Home extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      user: props.user,
+      session: props.session,
+    };
+  }
+  closeDrawer = () => {
+    this._drawer._root.close()
+  }
+  openDrawer = () => {
+    this._drawer._root.open()
+  }
   render() {
+    let items = this.state.dataSource;
     return (
-      <Navigator
-         renderScene={this.renderScene}
-         navigator={this.props.navigator}
-         configureScene={(route, routeStack) => Navigator.SceneConfigs.VerticalUpSwipeJump} />
+      <Drawer
+        ref={(ref) => this._drawer = ref}
+        content={ <DrawerMenu navigator={this.props.navigator} user={this.props.user} session={this.props.session} /> }
+        >
+      <StyleProvider  style={getTheme()}>
+        <Container>
+          <Header searchBar>
+            <Left>
+              <Button transparent onPress={this.openDrawer}>
+                <Icon name='menu' />
+              </Button>
+              </Left>
+              <Body>
+                <Title>Odoo Brasil</Title>
+              </Body>
+              <Right />
+            </Header>
+            <Content>
+              <Text>Aqui vai o texto</Text>
+            </Content>
+          </Container>
+        </StyleProvider>
+      </Drawer>
     );
-   }
-   render() {
-     return (
-       <Container>
-             <Header>
-                 <Left>
-                     <Button transparent>
-                         <Icon name='menu' />
-                     </Button>
-                 </Left>
-                 <Body>
-                     <Title>Trustcode</Title>
-                 </Body>
-                 <Right />
-             </Header>
-
-             <Content>
-                 <Text> O Conteúdo vai aqui</Text>
-             </Content>
-
-             <Footer>
-                 <FooterTab>
-                     <Button full>
-                         <Text>Footer</Text>
-                     </Button>
-                 </FooterTab>
-             </Footer>
-         </Container>
-     );
-   }
+  }
 }
 
 const styles = StyleSheet.create({
-  fundo: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection:'row',
-    width: null,
-    height: null
-  },
-  textContent: {
-    color: 'red'
   },
 });
+
+AppRegistry.registerComponent('Home', () => Home);
